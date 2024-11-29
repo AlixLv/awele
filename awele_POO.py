@@ -23,7 +23,7 @@ class Game():
         self.score = 0
         self.player1 = Player(player1_name)
         self.player2 = Player(player2_name)
-        self.current_player = self.player2
+        self.current_player = self.player1
         self.index = 0
 
 
@@ -66,20 +66,21 @@ class Game():
         for key, value in zip(self.second_part_letters_dict, self.second_part_board):
             self.player_board[key] = value
         print(self.player_board)
-
+        return self.player_board
 
     def player2_board_init(self):
         self.player_board = self.player2.get_player_board()
         for key, value in zip(self.first_part_letters_dict, self.first_part_board):
             self.player_board[key] = value
         print(self.player_board)
+        return self.player_board
 
 
     def getting_user_index_for_saw(self):
         self.index = input("Sélectionnez le champs depuis lequel vous voulez semer: ")
-        if self.current_player == self.player1 and int(self.index) > 5:
+        if self.current_player == self.player1 and self.index > "f" :
             self.index = input("Vous devez sélectionner un champ compris entre les lettres a et f incluses: ")
-        elif self.current_player == self.player2 and int(self.index) < 6:
+        elif self.current_player == self.player2 and self.index < "g":
             self.index = input("Vous devez sélectionner un champ compris entre les lettres g et l incluses: ")   
         self.index = int(self.index)
         return self.index
@@ -96,6 +97,19 @@ class Game():
             return 0
         else:
             return self.index +1
+        
+
+    def get_matching_index(self):
+        self.index = "g"
+        print(self.index)
+        print(self.current_player.player_board)
+        for key, value in self.current_player.player_board.items():
+            print("IN FOR LOOP")
+            print(key, "-", value)
+            if self.index == key:
+                print(key, value)
+                self.index = value
+                print("index: ", self.index, type(self.index))
 
 
     def get_next_index_harvest(self):
@@ -147,7 +161,6 @@ class Game():
 
 awele = Game("Ada", "Audrey")
 awele.start_turn()
-
 
     #TO DO 
     # fonction pour relier la lettre entrée dans input et l'index correspondant
