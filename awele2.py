@@ -1,14 +1,14 @@
-board = [1, 0, 3, 0, 0, 5, 6, 0, 0, 7, 0, 3]
+board = [3, 4, 3, 2, 7, 8, 7, 3, 3, 7, 5, 3]
 
 def main():
     print("DISPLAY BOARD: ")
     display_board(board) 
     saw(6)
-    print("DISPLAY BOARD AFTER SAW: ")
+    print("DISPLAY BOARD 🌱: ")
     display_board(board) 
-    # harvest(6)
-    # print("DISPLAY BOARD AFTER HARVEST: ")
-    # display_board(board) 
+    harvest(9)
+    print("DISPLAY BOARD ♻️: ")
+    display_board(board) 
 
 def display_board(list):
     length = len(list)
@@ -21,43 +21,35 @@ def display_board(list):
     
 
 def saw(index):
+    #TO DO
+    #en fonction du joueur en train de jouer, délimiter la partie du plateau à partir de laquelle il peut jouer
+    #joueur1 = plateau[0] à plateau[5]
+    #joueur2 = plateau[6] à plteau[11]
     number_of_seeds = board[index]
-
     board[index] = 0
-
-    current_index = index
-    print("CURRENT INDEX AT START: ", current_index)
-
+    
     while number_of_seeds > 0:
-        current_index = get_next_index_saw(current_index)
-        print("CURRENT_INDEX: ", current_index)
-        board[current_index] += 1
+        next_index = get_next_index_saw(index)
+        board[next_index] += 1
         number_of_seeds -= 1
-
-        # TO DO 
-        # ni = get next index clockwise 
-        # board[ni] ++
+        index = next_index
+    
 
 def harvest(index):
     # TO DO
-    # ajouter en paramètre le joueur qui récolte
+    # ajouter paramètre du joueur pour gérer le score
     score = 0
-    next_index = index
-
     # on peut ramasser uniquement s'il y a plus de 2 graines dans la case
-    while board[next_index] >= 2:
-        score += board[next_index]
-        board[next_index] = 0
-        next_index = get_next_index_harvest(next_index)
-        # si l'index change de ligne, on break pour que le joueur évite de ramasser ses propres graines
-        if next_index <= 5:
-            break
-
-    print("score : ", score)
+    while board[index] >= 2:
+        score += board[index]
+        board[index] = 0
+        next_index = get_next_index_harvest(index)
+        index = next_index
+    print(f"You're score: {score}")
 
 
 def get_next_index_saw(index):
-    if index == len(board):
+    if index == len(board)-1:
         return 0
     else:
         return index + 1
