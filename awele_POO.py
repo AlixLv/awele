@@ -57,22 +57,23 @@ class Game():
 
     # REFACTO A FAIRE player2_board_init et player1_board_init
     def player1_board_init(self):
+        board_index_player1 = [0, 1, 2, 3, 4, 5]
         length_letters = len(self.letters_to_dict)
         middle_letters = int(length_letters / 2)
         self.first_part_letters_dict = self.letters_to_dict[:middle_letters]
         self.second_part_letters_dict = self.letters_to_dict[middle_letters:]
 
         self.player_board = self.player1.get_player_board()
-        for key, value in zip(self.second_part_letters_dict, self.second_part_board):
+        for key, value in zip(self.first_part_letters_dict, board_index_player1):
             self.player_board[key] = value
-        print(self.player_board)
         return self.player_board
 
     def player2_board_init(self):
+        board_index_player2 = [6, 7, 8, 9, 10, 11]
         self.player_board = self.player2.get_player_board()
-        for key, value in zip(self.first_part_letters_dict, self.first_part_board):
+
+        for key, value in zip(self.second_part_letters_dict, board_index_player2):
             self.player_board[key] = value
-        print(self.player_board)
         return self.player_board
 
 
@@ -82,13 +83,11 @@ class Game():
             self.index = input("Vous devez sélectionner un champ compris entre les lettres a et f incluses: ")
         elif self.current_player == self.player2 and self.index < "g":
             self.index = input("Vous devez sélectionner un champ compris entre les lettres g et l incluses: ")   
-        self.index = int(self.index)
         return self.index
 
 
     def getting_user_index_for_harvest(self):
         self.index = input("Sélectionnez le champs à partir duquel vous voulez récoltez: ")
-        self.index = int(self.index)
         return self.index
 
 
@@ -99,17 +98,23 @@ class Game():
             return self.index +1
         
 
-    def get_matching_index(self):
-        self.index = "g"
-        print(self.index)
-        print(self.current_player.player_board)
+    def get_matching_index_saw(self):
         for key, value in self.current_player.player_board.items():
-            print("IN FOR LOOP")
-            print(key, "-", value)
             if self.index == key:
-                print(key, value)
                 self.index = value
-                print("index: ", self.index, type(self.index))
+                return self.index
+
+    def get_matching_index_harvest(self):
+        if self.current_player == self.player1:
+            for key, value in self.player2.player_board.items():
+                if self.index == key:
+                    self.index = value
+                    return self.index
+        else:
+            for key, value in self.player1.player_board.items():
+                if self.index == key:
+                    self.index = value
+                    return self.index 
 
 
     def get_next_index_harvest(self):
@@ -145,11 +150,15 @@ class Game():
     def start_turn(self):
         while self.start_number_seeds > 0:
             awele.display_board()
+            awele.player1_board_init()
+            awele.player2_board_init()
             print(f"C'est au tour de {self.display_player_name()} de jouer")
             awele.getting_user_index_for_saw()
+            awele.get_matching_index_saw()
             awele.saw()
             awele.display_board()
             awele.getting_user_index_for_harvest()
+            awele.get_matching_index_harvest()
             awele.harvest()
             if self.current_player == self.player1:
                 self.current_player = self.player2
@@ -158,12 +167,7 @@ class Game():
  
 
 
-
 awele = Game("Ada", "Audrey")
 awele.start_turn()
 
-    #TO DO 
-    # fonction pour relier la lettre entrée dans input et l'index correspondant
-    #en fonction du joueur en train de jouer, délimiter la partie du plateau à partir de laquelle il peut jouer
-    #joueur1 = plateau[0] à plateau[5]
-    #joueur2 = plateau[6] à plteau[11]
+
